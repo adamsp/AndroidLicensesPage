@@ -8,7 +8,7 @@ You need to include `LicensesFragment.java` in your projects source, as well as 
 
 To display licenses for your app, you need to update the `licenses.html` file to suit (including any libraries you've used, their licenses, copyrights, and any links to source you may have modified, if required), then you can display it as you would any other [DialogFragment](http://developer.android.com/reference/android/app/DialogFragment.html):
 
-```
+```java
 // Create & show a licenses fragment just as you would any other DialogFragment.
 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 Fragment prev = getSupportFragmentManager().findFragmentByTag("licensesDialogFragment");
