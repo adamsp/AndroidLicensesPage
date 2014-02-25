@@ -2,6 +2,8 @@ Android Licenses Page
 ============
 This repository contains an example of how to produce a licenses page for an Android app similar to the ones found in Google apps such as Play Music and Gmail.
 
+<img src="./screenshot01_framed.png" width="423" height="714"/>
+
 ## How to use
 
 You need to include `LicensesFragment.java` in your projects source, as well as including the `licenses_fragment.xml` layout file in `/res/layout` and the `licenses.html` file in `/res/raw`. You should update the namespace to suit.
