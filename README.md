@@ -4,27 +4,22 @@ This repository contains an example of how to produce a licenses page for an And
 
 <img src="./screenshot01_framed.png" width="423" height="714"/>
 
-## How to use
+## Usage
 
-You need to include `LicensesFragment.java` in your projects source, as well as including the `licenses_fragment.xml` layout file in `/res/layout` and the `licenses.html` file in `/res/raw`. You should update the namespace to suit.
+You need to include the following files:
+- `LicensesFragment.java` in your projects source
+- `/res/layout/licenses_fragment.xml` layout file 
+- `/res/raw/licenses.html` licenses file
 
-To display licenses for your app, you need to update the `licenses.html` file to suit (including any libraries you've used, their licenses, copyrights, and any links to source you may have modified, if required), then you can display it as you would any other [DialogFragment](http://developer.android.com/reference/android/app/DialogFragment.html):
+You will need to update the namespace of `LicensesFragment`, and you may as well check out the other TODOs while you're there - things like removing the support library references if you aren't using it, and extracting the dialog title out to your strings file.
+
+To display licenses for your app, you need to update the `licenses.html` file to suit (including any libraries you've used, their licenses, copyrights, and any links to source you may have modified, if required), then you can display it as follows:
 
 ```java
-// Create & show a licenses fragment just as you would any other DialogFragment.
-FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-Fragment prev = getSupportFragmentManager().findFragmentByTag("licensesDialogFragment");
-if (prev != null) {
-	ft.remove(prev);
-}
-ft.addToBackStack(null);
-
-// Create and show the dialog.
-DialogFragment newFragment = LicensesFragment.newInstance();
-newFragment.show(ft, "licensesDialogFragment");
+LicensesFragment.displayLicensesFragment(getSupportFragmentManager());
 ```
 
-There are some TODOs in the LicensesFragment file - you should modify these things to suit your environment, though things will work fine without you needing to touch anything.
+You can also display it yourself as you would any other [DialogFragment](http://developer.android.com/reference/android/app/DialogFragment.html).
 
 If you clone the repository, you should be able to open the included AndroidLicensesPageExampleProject in Android Studio and run it directly on any device running Android 2.1 or higher.
 
