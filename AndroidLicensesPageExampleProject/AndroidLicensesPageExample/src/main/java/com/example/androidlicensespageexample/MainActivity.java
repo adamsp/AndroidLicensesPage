@@ -25,17 +25,22 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onLicensesClick(View view) {
-        // Create & show a licenses fragment just as you would any other DialogFragment.
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment prev = getSupportFragmentManager().findFragmentByTag("licensesDialogFragment");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
+        LicensesFragment.displayLicensesFragment(getSupportFragmentManager());
 
-        // Create and show the dialog.
-        DialogFragment newFragment = LicensesFragment.newInstance();
-        newFragment.show(ft, "licensesDialogFragment");
+        /**
+         * Alternatively, you can display it like a regular DialogFragment.
+         */
+//        // Create & show a licenses fragment just as you would any other DialogFragment.
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        Fragment prev = getSupportFragmentManager().findFragmentByTag("licensesDialogFragment");
+//        if (prev != null) {
+//            ft.remove(prev);
+//        }
+//        ft.addToBackStack(null);
+//
+//        // Create and show the dialog.
+//        DialogFragment newFragment = LicensesFragment.newInstance();
+//        newFragment.show(ft, "licensesDialogFragment");
     }
 
 
