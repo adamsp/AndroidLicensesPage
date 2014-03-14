@@ -1,5 +1,6 @@
 .gradle
-/local.properties
-/.idea/workspace.xml
+local.properties
 .DS_Store
-AndroidLicensesPageExampleProject/local.properties
+
+**/.idea/libraries/
+**/.idea/workspace.xml
