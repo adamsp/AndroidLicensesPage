@@ -16,7 +16,6 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -25,12 +24,20 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onLicensesClick(View view) {
+        /**
+         * Display it with no Close button.
+         */
         LicensesFragment.displayLicensesFragment(getSupportFragmentManager());
+
+        /**
+         * Display it with a Close button.
+         */
+        //LicensesFragment.displayLicensesFragment(getSupportFragmentManager(), true);
 
         /**
          * Alternatively, you can display it like a regular DialogFragment.
          */
-//        // Create & show a licenses fragment just as you would any other DialogFragment.
+        // Create & show a licenses fragment just as you would any other DialogFragment.
 //        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 //        Fragment prev = getSupportFragmentManager().findFragmentByTag("licensesDialogFragment");
 //        if (prev != null) {
@@ -39,9 +46,8 @@ public class MainActivity extends ActionBarActivity {
 //        ft.addToBackStack(null);
 //
 //        // Create and show the dialog.
+//        // Use LicensesFragment.newInstance(true) to show a Close button.
 //        DialogFragment newFragment = LicensesFragment.newInstance();
 //        newFragment.show(ft, "licensesDialogFragment");
     }
-
-
 }

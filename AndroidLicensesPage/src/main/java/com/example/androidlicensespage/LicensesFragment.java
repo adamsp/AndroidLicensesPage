@@ -16,43 +16,70 @@
 
 package com.example.androidlicensespage;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-// TODO If you don't support Android 2.x, you should use the non-support version!
+//TODO If you don't support Android 2.x, you should use the non-support version!
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-
 /**
- * Created by Adam Speakman on 24/09/13.
+ * Created by Adam Speakman on 24/09/13. 
  * http://speakman.net.nz
  */
 public class LicensesFragment extends DialogFragment {
 
+    private AlertDialog.Builder mBuilder;
     private AsyncTask<Void, Void, String> mLicenseLoader;
 
     private static final String FRAGMENT_TAG = "nz.net.speakman.androidlicensespage.LicensesFragment";
+    private static final String KEY_SHOW_CLOSE_BUTTON = "keyShowCloseButton";
 
+    /**
+     * Creates a new instance of LicensesFragment with no Close button.
+     * 
+     * @return A new licenses fragment.
+     */
     public static LicensesFragment newInstance() {
         return new LicensesFragment();
     }
 
     /**
-     * Builds and displays a licenses fragment for you. Requires "/res/raw/licenses.html" and
-     * "/res/layout/licenses_fragment.xml" to be present.
-     *
+     * Creates a new instance of LicensesFragment with an optional Close button.
+     * 
+     * @param showCloseButton Whether to show a Close button at the bottom of the dialog.
+     * 
+     * @return A new licenses fragment.
+     */
+    public static LicensesFragment newInstance(boolean showCloseButton) {
+        LicensesFragment fragment = new LicensesFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(KEY_SHOW_CLOSE_BUTTON, showCloseButton);
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    /**
+     * Builds and displays a licenses fragment with no Close button. Requires
+     * "/res/raw/licenses.html" and "/res/layout/licenses_fragment.xml" to be
+     * present.
+     * 
      * @param fm A fragment manager instance used to display this LicensesFragment.
      */
     public static void displayLicensesFragment(FragmentManager fm) {
@@ -68,17 +95,25 @@ public class LicensesFragment extends DialogFragment {
         newFragment.show(ft, FRAGMENT_TAG);
     }
 
-    private WebView mWebView;
-    private ProgressBar mIndeterminateProgress;
+    /**
+     * Builds and displays a licenses fragment with or without a Close button.
+     * Requires "/res/raw/licenses.html" and "/res/layout/licenses_fragment.xml"
+     * to be present.
+     * 
+     * @param fm A fragment manager instance used to display this LicensesFragment.
+     * @param showCloseButton Whether to show a Close button at the bottom of the dialog.
+     */
+    public static void displayLicensesFragment(FragmentManager fm, boolean showCloseButton) {
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment prev = fm.findFragmentByTag(FRAGMENT_TAG);
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO Extract this title out into your strings resource file.
-        getDialog().setTitle("Open Source licenses");
-        View view = inflater.inflate(R.layout.licenses_fragment, container, false);
-        mIndeterminateProgress = (ProgressBar)view.findViewById(R.id.licensesFragmentIndeterminateProgress);
-        mWebView = (WebView)view.findViewById(R.id.licensesFragmentWebView);
-        return view;
+        // Create and show the dialog.
+        DialogFragment newFragment = LicensesFragment.newInstance(showCloseButton);
+        newFragment.show(ft, FRAGMENT_TAG);
     }
 
     @Override
@@ -93,6 +128,38 @@ public class LicensesFragment extends DialogFragment {
         if (mLicenseLoader != null) {
             mLicenseLoader.cancel(true);
         }
+    }
+
+    private WebView mWebView;
+    private ProgressBar mIndeterminateProgress;
+
+    @SuppressLint("InflateParams")
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View content = LayoutInflater.from(getActivity()).inflate(R.layout.licenses_fragment, null);
+        mWebView = (WebView) content.findViewById(R.id.licensesFragmentWebView);
+        mIndeterminateProgress = (ProgressBar) content.findViewById(R.id.licensesFragmentIndeterminateProgress);
+
+        boolean showCloseButton = false;
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            showCloseButton = arguments.getBoolean(KEY_SHOW_CLOSE_BUTTON);    	
+        }
+    
+        mBuilder = new AlertDialog.Builder(getActivity());
+        mBuilder.setTitle("Open Source licenses");
+        mBuilder.setView(content);
+        if (showCloseButton) {
+            mBuilder.setNegativeButton("Close",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        }
+
+        return mBuilder.create();
     }
 
     private void loadLicenses() {
@@ -123,13 +190,15 @@ public class LicensesFragment extends DialogFragment {
             @Override
             protected void onPostExecute(String licensesBody) {
                 super.onPostExecute(licensesBody);
-                if (getActivity() == null || isCancelled()) return;
+                if (getActivity() == null || isCancelled()) {
+                    return;
+                }	
                 mIndeterminateProgress.setVisibility(View.INVISIBLE);
                 mWebView.setVisibility(View.VISIBLE);
                 mWebView.loadDataWithBaseURL(null, licensesBody, "text/html", "utf-8", null);
                 mLicenseLoader = null;
             }
-
+            
         }.execute();
     }
 }
