@@ -145,11 +145,11 @@ public class LicensesFragment extends DialogFragment {
             showCloseButton = arguments.getBoolean(KEY_SHOW_CLOSE_BUTTON);
         }
 
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-        mBuilder.setTitle("Open Source licenses");
-        mBuilder.setView(content);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Open Source licenses");
+        builder.setView(content);
         if (showCloseButton) {
-            mBuilder.setNegativeButton("Close",
+            builder.setNegativeButton("Close",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -158,7 +158,7 @@ public class LicensesFragment extends DialogFragment {
                 });
         }
 
-        return mBuilder.create();
+        return builder.create();
     }
 
     private void loadLicenses() {
