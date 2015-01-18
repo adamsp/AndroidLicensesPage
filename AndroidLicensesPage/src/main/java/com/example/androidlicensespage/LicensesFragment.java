@@ -38,12 +38,11 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 /**
- * Created by Adam Speakman on 24/09/13. 
+ * Created by Adam Speakman on 24/09/13.
  * http://speakman.net.nz
  */
 public class LicensesFragment extends DialogFragment {
 
-    private AlertDialog.Builder mBuilder;
     private AsyncTask<Void, Void, String> mLicenseLoader;
 
     private static final String FRAGMENT_TAG = "nz.net.speakman.androidlicensespage.LicensesFragment";
@@ -51,7 +50,7 @@ public class LicensesFragment extends DialogFragment {
 
     /**
      * Creates a new instance of LicensesFragment with no Close button.
-     * 
+     *
      * @return A new licenses fragment.
      */
     public static LicensesFragment newInstance() {
@@ -60,9 +59,9 @@ public class LicensesFragment extends DialogFragment {
 
     /**
      * Creates a new instance of LicensesFragment with an optional Close button.
-     * 
+     *
      * @param showCloseButton Whether to show a Close button at the bottom of the dialog.
-     * 
+     *
      * @return A new licenses fragment.
      */
     public static LicensesFragment newInstance(boolean showCloseButton) {
@@ -79,7 +78,7 @@ public class LicensesFragment extends DialogFragment {
      * Builds and displays a licenses fragment with no Close button. Requires
      * "/res/raw/licenses.html" and "/res/layout/licenses_fragment.xml" to be
      * present.
-     * 
+     *
      * @param fm A fragment manager instance used to display this LicensesFragment.
      */
     public static void displayLicensesFragment(FragmentManager fm) {
@@ -99,7 +98,7 @@ public class LicensesFragment extends DialogFragment {
      * Builds and displays a licenses fragment with or without a Close button.
      * Requires "/res/raw/licenses.html" and "/res/layout/licenses_fragment.xml"
      * to be present.
-     * 
+     *
      * @param fm A fragment manager instance used to display this LicensesFragment.
      * @param showCloseButton Whether to show a Close button at the bottom of the dialog.
      */
@@ -143,10 +142,10 @@ public class LicensesFragment extends DialogFragment {
         boolean showCloseButton = false;
         Bundle arguments = getArguments();
         if (arguments != null) {
-            showCloseButton = arguments.getBoolean(KEY_SHOW_CLOSE_BUTTON);    	
+            showCloseButton = arguments.getBoolean(KEY_SHOW_CLOSE_BUTTON);
         }
-    
-        mBuilder = new AlertDialog.Builder(getActivity());
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
         mBuilder.setTitle("Open Source licenses");
         mBuilder.setView(content);
         if (showCloseButton) {
@@ -192,13 +191,13 @@ public class LicensesFragment extends DialogFragment {
                 super.onPostExecute(licensesBody);
                 if (getActivity() == null || isCancelled()) {
                     return;
-                }	
+                }
                 mIndeterminateProgress.setVisibility(View.INVISIBLE);
                 mWebView.setVisibility(View.VISIBLE);
                 mWebView.loadDataWithBaseURL(null, licensesBody, "text/html", "utf-8", null);
                 mLicenseLoader = null;
             }
-            
+
         }.execute();
     }
 }
